@@ -66,6 +66,10 @@ li:nth-child(odd) {
   display: none;
 }
 
+.show {
+  display: block;
+}
+
 .start {
   text-align: center;
 }
@@ -95,3 +99,6 @@ li:nth-child(odd) {
   display: block;
 }
 
+#end-screen {
+  
+}
