@@ -1,5 +1,4 @@
-
-// ** Module 6 Code Quiz by Jonathon Edward (12/2023)
+// ** Module 6 Code Quiz Challenge by Jonathon Edward (12/2023)
 
 let questionTitle = document.querySelector("#question-title");
 let questionsDiv = document.querySelector("#questions");
@@ -72,7 +71,7 @@ function renderQuestion(question) {
         let questionBtn = document.createElement("button");
         questionBtn.className = "choices button";
         questionBtn.dataset.answer = index === question.answerIndex ? "correct" : "wrong";
-        questionBtn.dataset.id = index;
+        questionBtn.dataset.id = index + 1;
         questionBtn.textContent = `${questionBtn.dataset.id}. ${choice}`;
         questionBtn.addEventListener("click", checkAnswer)
         choicesDiv.appendChild(questionBtn);
@@ -86,26 +85,32 @@ function checkAnswer(event) {
     event.stopPropagation();
     let clickedAnswer = event.target.dataset.answer;
 
-    if (clickedAnswer === "correct") {
-        console.log("Correct answer!");
-        
-        if (questionNum === questionsArray.length-1) {
-            console.log("YOU WON THE GAME!");
-            questionsDiv.style.display = "none";
-            endScreenDiv.classList.add("show");
-
-        } else {
-            choicesDiv.innerHTML = "";
-            questionNum++;
-            score++; console.log("Score: " + score);
-            renderQuestion(questionsArray[questionNum]);
-        }
-
-
-    } else {
+    // Answer correct and questions remain
+    if (clickedAnswer === "correct" && questionNum !== questionsArray.length - 1) {
+        choicesDiv.innerHTML = "";
+        questionNum++;
+        score++; console.log("Score: " + score);
+        renderQuestion(questionsArray[questionNum]);
+        // Answer correct and no questions remain
+    } else if (clickedAnswer === "correct" && questionNum === questionsArray.length - 1) {
+        console.log("YOU WON THE GAME!");
+        questionsDiv.style.display = "none";
+        endScreenDiv.classList.add("show");
+        // Answer incorrect and questions remain
+    } else if (clickedAnswer !== "correct" && questionNum !== questionsArray.length - 1) {
         console.log("Wrong answer!");
-        // TODO Add time to clock
-        // TODO Move to next question
+        choicesDiv.innerHTML = "";
+        questionNum++;
+        renderQuestion(questionsArray[questionNum]);
+        // Answer is correct and no questions remain
+    } else if (clickedAnswer === "correct" && questionNum === questionsArray.length - 1) {
+        console.log("Correct answer! All questions answered");
     }
+
     console.log(clickedAnswer);
 }
+
+// TODO - add timer
+// TODO - add score system
+// TODO - add sounds on click
+// TODO - add README
