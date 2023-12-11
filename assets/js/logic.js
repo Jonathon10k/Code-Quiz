@@ -6,6 +6,8 @@ let endScreenDiv = document.querySelector("#end-screen");
 let choicesDiv = document.querySelector("#choices");
 let startBtn = document.querySelector("#start")
 let startScreenDiv = document.querySelector("#start-screen")
+let initialsInput = document.querySelector("#initials");
+let submitBtn = document.querySelector("#submit");
 let questionNum = 0;
 let score = 0;
 
@@ -14,7 +16,7 @@ let gameTimer = {
     time: 60000, // Default 60 seconds
 
     start() {
-        console.log(`Started ${this.time/1000} sec timer`);
+        console.log(`Started ${this.time / 1000} sec timer`);
     },
     getTime() {
         console.log(this.timeLeft);
@@ -60,13 +62,14 @@ function checkAnswer(event) {
     if (clickedAnswer === "correct" && questionNum !== questionsArray.length - 1) {
         choicesDiv.innerHTML = "";
         questionNum++;
-        score++; console.log("Score: " + score);
+        score++;
         renderQuestion(questionsArray[questionNum]);
         // Answer correct and no questions remain
     } else if (clickedAnswer === "correct" && questionNum === questionsArray.length - 1) {
         console.log("YOU WON THE GAME!");
         questionsDiv.style.display = "none";
         endScreenDiv.classList.add("show");
+        score++;
         // Answer incorrect and questions remain
     } else if (clickedAnswer !== "correct" && questionNum !== questionsArray.length - 1) {
         console.log("Wrong answer!");
@@ -82,10 +85,38 @@ function checkAnswer(event) {
     console.log(clickedAnswer);
 }
 
+// Handle submit button
+submitBtn.addEventListener("click", () => {
+    let initials = initialsInput.value;
+
+    if (initials !== "") {
+
+        if (localStorage.getItem("scoresList") !== null) {
+            // If scoresList exists in localStorage, push new values to array
+            let storedScores = JSON.parse(localStorage.getItem("scoresList"));
+            let currentScore = { name: initials, score: score };
+            storedScores.push(currentScore);
+            localStorage.setItem("scoresList", JSON.stringify(storedScores));
+            console.log(localStorage.getItem("scoresList"));
+        } else {
+            let scoresList = [];
+            let currentScore = { name: initials, score: score };
+            scoresList.push(currentScore);
+            localStorage.setItem("scoresList", JSON.stringify(scoresList));
+            console.log(localStorage.getItem("scoresList"));
+        }
+
+        initials.value = "";
+        window.location.href = "highscores.html";
+
+    } else {
+        alert("Please enter your initials!");
+    }
+})
 // TODO - add timer
 // TODO - add score system
 // TODO - add sounds on click
 // TODO - add README
-// TODO add questions to questions.js
+
 // TODO View High Score styling
 // TODO status under questions

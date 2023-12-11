@@ -99,6 +99,6 @@ li:nth-child(odd) {
   display: block;
 }
 
-#end-screen {
-  
+.top-score {
+  border: 2px solid red;
 }
