@@ -17,6 +17,10 @@ h2 {
   font-size: 1.5rem;
 }
 
+.score-h1, .score-h3 {
+  text-align: center;
+}
+
 button {
   display: inline-block;
   margin: 5px;
@@ -57,6 +61,10 @@ li:nth-child(odd) {
   background-color: #f3edfc;
 }
 
+li:first-child {
+  border: 3px dashed #7248b0;
+}
+
 .wrapper {
   margin: 100px auto 0 auto;
   max-width: 600px;
@@ -87,6 +95,7 @@ li:nth-child(odd) {
   padding-top: 10px;
   color: gray;
   border-top: 2px solid #ccc;
+  display: block;
 }
 
 .timer {

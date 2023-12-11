@@ -13,14 +13,11 @@ function renderScores() {
         let storedScores = localStorage.getItem("scoresList");
         let scoresList = JSON.parse(storedScores);
         console.log(scoresList)
-
-        scoresList.forEach((item, index, arr) => {
+      
+        scoresList.forEach((item, index) => {
             console.log(item.name)
             let scoreEntry = document.createElement("li");
-            if (index < arr.length - 1 && item.score > arr[index + 1].score) {
-                scoreEntry.classList.add("top-score");
-            }
-            scoreEntry.textContent = `"Initials: ${item.name} - Score: ${item.score}"`;
+            scoreEntry.textContent = `${item.name} - Score: ${item.score}`;
             scoresOl.appendChild(scoreEntry);
         })
     } else {

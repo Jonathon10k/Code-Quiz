@@ -8,6 +8,7 @@ let startBtn = document.querySelector("#start")
 let startScreenDiv = document.querySelector("#start-screen")
 let initialsInput = document.querySelector("#initials");
 let submitBtn = document.querySelector("#submit");
+let feedbackDiv = document.querySelector("#feedback");
 let questionNum = 0;
 let score = 0;
 
@@ -21,22 +22,39 @@ let gameTimer = {
     getTime() {
         console.log(this.timeLeft);
     },
-    take10() {
+    minus10() { // Minus 10 seconds from timer
         console.log(this.timer - 10000);
     }
 }
+
+// Sound FX object
+let playFX = {
+    pathCorrect: "./assets/sfx/correct.wav",
+    pathIncorrect: "./assets/sfx/incorrect.wav",
+
+    correct() {
+        let sound = new Audio(this.pathCorrect);
+        sound.play();
+    },
+
+    incorrect() {
+        let sound = new Audio(this.pathIncorrect);
+        sound.play();
+    },
+}
+
 
 function start() {
     questionsDiv.classList.remove("hide");
     startScreenDiv.classList.add("hide")
     renderQuestion(questionsArray[0]);
-
     gameTimer.start();
-
 }
 
 // Render the current question/answer set to screen
 function renderQuestion(question) {
+    choicesDiv.innerHTML = "";
+    feedbackDiv.classList.remove(".hide");
     questionTitle.textContent = question.question;
     console.log(`---${question.name}---`);
 
@@ -60,26 +78,35 @@ function checkAnswer(event) {
 
     // Answer correct and questions remain
     if (clickedAnswer === "correct" && questionNum !== questionsArray.length - 1) {
-        choicesDiv.innerHTML = "";
         questionNum++;
+        playFX.correct();
         score++;
+        feedbackDiv.textContent = "Correct answer!";
         renderQuestion(questionsArray[questionNum]);
         // Answer correct and no questions remain
     } else if (clickedAnswer === "correct" && questionNum === questionsArray.length - 1) {
-        console.log("YOU WON THE GAME!");
+        feedbackDiv.textContent = "Correct answer!";
+        playFX.correct();
         questionsDiv.style.display = "none";
+        feedbackDiv.classList.add("hide");
         endScreenDiv.classList.add("show");
         score++;
         // Answer incorrect and questions remain
     } else if (clickedAnswer !== "correct" && questionNum !== questionsArray.length - 1) {
-        console.log("Wrong answer!");
-        gameClock.take10();
+        gameTimer.minus10();
+        feedbackDiv.textContent = "Incorrect answer!";
+        playFX.incorrect();
         choicesDiv.innerHTML = "";
         questionNum++;
         renderQuestion(questionsArray[questionNum]);
-        // Answer is correct and no questions remain
-    } else if (clickedAnswer === "correct" && questionNum === questionsArray.length - 1) {
-        console.log("Correct answer! All questions answered");
+        // Answer icorrect and no questions remain
+    } else if (clickedAnswer !== "correct" && questionNum === questionsArray.length - 1) {
+        feedbackDiv.textContent = "Incorrect answer!";
+        playFX.incorrect();
+        questionsDiv.style.display = "none";
+        feedbackDiv.classList.add("hide");
+        endScreenDiv.classList.add("show");
+        gameTimer.minus10();
     }
 
     console.log(clickedAnswer);
@@ -95,15 +122,13 @@ submitBtn.addEventListener("click", () => {
             // If scoresList exists in localStorage, push new values to array
             let storedScores = JSON.parse(localStorage.getItem("scoresList"));
             let currentScore = { name: initials, score: score };
-            storedScores.push(currentScore);
+            storedScores.unshift(currentScore);
             localStorage.setItem("scoresList", JSON.stringify(storedScores));
-            console.log(localStorage.getItem("scoresList"));
         } else {
             let scoresList = [];
             let currentScore = { name: initials, score: score };
-            scoresList.push(currentScore);
+            scoresList.unshift(currentScore);
             localStorage.setItem("scoresList", JSON.stringify(scoresList));
-            console.log(localStorage.getItem("scoresList"));
         }
 
         initials.value = "";
@@ -113,10 +138,9 @@ submitBtn.addEventListener("click", () => {
         alert("Please enter your initials!");
     }
 })
+
+
 // TODO - add timer
-// TODO - add score system
 // TODO - add sounds on click
 // TODO - add README
 
-// TODO View High Score styling
-// TODO status under questions
