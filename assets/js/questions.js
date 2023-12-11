@@ -12,7 +12,7 @@ let questionsArray = [
     {
         name: "question2",
         question: "In JavaScript, which of the following would you use to inspect for error messages?",
-        answerChoices: ["Prompt", "Console", "LocalStorage", "CSS file"],
+        answerChoices: ["Prompt", "Console", "localStorage", "CSS file"],
         answer: "Console",
         answerIndex: 1,
     },

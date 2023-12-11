@@ -1,7 +1,9 @@
 // ** Module 6 Code Quiz Challenge by Jonathon Edward (12/2023)
 
+let timerSpan = document.querySelector("#time");
 let questionTitle = document.querySelector("#question-title");
 let questionsDiv = document.querySelector("#questions");
+let finalScoreDisplay = document.querySelector("#final-score");
 let endScreenDiv = document.querySelector("#end-screen");
 let choicesDiv = document.querySelector("#choices");
 let startBtn = document.querySelector("#start")
@@ -14,16 +16,26 @@ let score = 0;
 
 // Game timer object
 let gameTimer = {
-    time: 60000, // Default 60 seconds
-
+    time: 0,
     start() {
-        console.log(`Started ${this.time / 1000} sec timer`);
+        this.time = 30000; // 30 secs time limit
+        timerSpan.textContent = gameTimer.time / 1000;
+        // Set 1-second interval to decrement time and trigger game end
+        setInterval(() => {
+            if (this.time > 0) {
+                this.time -= 1000;
+                console.log(this.time / 1000);
+                timerSpan.textContent = this.time / 1000;
+            } else {
+                clearInterval(this);
+                console.log(`Time stopped at: ${this.time / 1000}`);
+                gameOver();
+            }
+        }, 1000);
     },
-    getTime() {
-        console.log(this.timeLeft);
-    },
-    minus10() { // Minus 10 seconds from timer
-        console.log(this.timer - 10000);
+    minus10() {
+        this.time -= 10000;
+        console.log("10 secs deducted");
     }
 }
 
@@ -43,12 +55,12 @@ let playFX = {
     },
 }
 
-
 function start() {
+
     questionsDiv.classList.remove("hide");
     startScreenDiv.classList.add("hide")
     renderQuestion(questionsArray[0]);
-    gameTimer.start();
+    gameTimer.start(); // Start the timer
 }
 
 // Render the current question/answer set to screen
@@ -86,11 +98,9 @@ function checkAnswer(event) {
         // Answer correct and no questions remain
     } else if (clickedAnswer === "correct" && questionNum === questionsArray.length - 1) {
         feedbackDiv.textContent = "Correct answer!";
-        playFX.correct();
-        questionsDiv.style.display = "none";
-        feedbackDiv.classList.add("hide");
-        endScreenDiv.classList.add("show");
         score++;
+        playFX.correct();
+        setTimeout(() => gameOver(), 2000);
         // Answer incorrect and questions remain
     } else if (clickedAnswer !== "correct" && questionNum !== questionsArray.length - 1) {
         gameTimer.minus10();
@@ -99,19 +109,25 @@ function checkAnswer(event) {
         choicesDiv.innerHTML = "";
         questionNum++;
         renderQuestion(questionsArray[questionNum]);
-        // Answer icorrect and no questions remain
+        // Answer incorrect and no questions remain
     } else if (clickedAnswer !== "correct" && questionNum === questionsArray.length - 1) {
         feedbackDiv.textContent = "Incorrect answer!";
         playFX.incorrect();
-        questionsDiv.style.display = "none";
-        feedbackDiv.classList.add("hide");
-        endScreenDiv.classList.add("show");
+        setTimeout(() => gameOver(), 2000);
         gameTimer.minus10();
+        gameOver();
     }
 
     console.log(clickedAnswer);
 }
 
+// Function to handle gameOver scenario
+function gameOver() {
+    questionsDiv.style.display = "none";
+    feedbackDiv.classList.add("hide");
+    endScreenDiv.classList.add("show")
+    finalScoreDisplay.textContent = score;
+}
 // Handle submit button
 submitBtn.addEventListener("click", () => {
     let initials = initialsInput.value;
@@ -139,8 +155,6 @@ submitBtn.addEventListener("click", () => {
     }
 })
 
-
-// TODO - add timer
-// TODO - add sounds on click
 // TODO - add README
+// TODO - KEYFRAMES FOR FEEDBACK
 
