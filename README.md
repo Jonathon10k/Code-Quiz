@@ -1,7 +1,7 @@
 # Code Quiz Game (Module 6 Challenge)
 My submission for the Module 6 Code Quiz Game challenge
 
-![Password Generator preview](./assets/screenshot.png)
+![Password Generator preview](./assets/images/screenshot.png)
 
 ## Description
 

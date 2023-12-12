@@ -14,11 +14,13 @@ let feedbackDiv = document.querySelector("#feedback");
 let questionNum = 0;
 let score = 0;
 
+feedbackDiv.style.display = "none";
+
 // Game timer object
 let gameTimer = {
     time: 0,
     start() {
-        this.time = 30000; // 30 secs time limit
+        this.time = 60000; // 60 secs time limit
         timerSpan.textContent = gameTimer.time / 1000;
         // Set 1-second interval to decrement time and trigger game end
         setInterval(() => {
@@ -59,6 +61,7 @@ function start() {
 
     questionsDiv.classList.remove("hide");
     startScreenDiv.classList.add("hide")
+    feedbackDiv.style.display = "block";
     renderQuestion(questionsArray[0]);
     gameTimer.start(); // Start the timer
 }
