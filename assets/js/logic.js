@@ -154,7 +154,3 @@ submitBtn.addEventListener("click", () => {
         alert("Please enter your initials!");
     }
 })
-
-// TODO - add README
-// TODO - KEYFRAMES FOR FEEDBACK
-
